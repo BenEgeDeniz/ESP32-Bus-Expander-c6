@@ -1,6 +1,6 @@
 #include "Controllers/WifiController.h"
 #include "Vendors/wifi_atks.h"
-#include "Vendors/slave_unified_c5.h"
+#include "Vendors/slave_unified_c6.h"
 
 /*
 Entry point for command
@@ -68,7 +68,7 @@ void WifiController::handleConnect(const TerminalCommand &cmd)
         // Creds found
         if (!ssid.empty() && !password.empty()) {
             confirmation = userInputManager.readYesNo(
-                "C5 WiFi: Use saved credentials for " + ssid + "? (Y/n)", true
+                "C6 WiFi: Use saved credentials for " + ssid + "? (Y/n)", true
             );
         } 
 
@@ -108,19 +108,19 @@ void WifiController::handleConnect(const TerminalCommand &cmd)
         password = full.substr(pos + 1);
     }
 
-    terminalView.println("C5 WiFi: Connecting to " + ssid + "...");
+    terminalView.println("C6 WiFi: Connecting to " + ssid + "...");
 
     wifiService.setModeApSta();
     wifiService.connect(ssid, password);
     if (wifiService.isConnected()) {
-        terminalView.println("\nC5 WiFi ✅ Connected successfully. IP: " + wifiService.getLocalIP() + "\n");
+        terminalView.println("\nC6 WiFi ✅ Connected successfully. IP: " + wifiService.getLocalIP() + "\n");
         // Save creds
         nvsService.open();
         nvsService.saveString(state.getNvsSsidField(), ssid);
         nvsService.saveString(state.getNvsPasswordField(), password);
         nvsService.close();
     } else {
-        terminalView.println("\nC5 WiFi: Connection failed.\n");
+        terminalView.println("\nC6 WiFi: Connection failed.\n");
         wifiService.reset();
         delay(100);
     }
@@ -132,7 +132,7 @@ Disconnect
 void WifiController::handleDisconnect(const TerminalCommand &cmd)
 {
     wifiService.disconnect();
-    terminalView.println("C5 WiFi: Disconnected.");
+    terminalView.println("C6 WiFi: Disconnected.");
 }
 
 /*
@@ -144,7 +144,7 @@ void WifiController::handleStatus(const TerminalCommand &cmd)
     auto bssid    = wifiService.getBssid();    if (bssid.empty()) bssid = "N/A";
     auto hostname = wifiService.getHostname(); if (hostname.empty()) hostname = "N/A";
 
-    terminalView.println("\n=== C5 Wi-Fi Status ===");
+    terminalView.println("\n=== C6 Wi-Fi Status ===");
     terminalView.println("Radio        : 2.4 GHz / 5 GHz");
     terminalView.println("Mode         : " + std::string(wifiService.getWifiModeRaw() == WIFI_MODE_AP ? "Access Point" : "Station"));
     terminalView.println("AP MAC       : " + wifiService.getMacAddressAp());
@@ -195,7 +195,7 @@ void WifiController::handleAp(const TerminalCommand &cmd)
     
     if (ssid == "stop") {
         wifiService.stopAccessPoint();
-        terminalView.println("C5 WiFi: Access Point stopped.\n");
+        terminalView.println("C6 WiFi: Access Point stopped.\n");
         return;
     }
 
@@ -244,7 +244,7 @@ void WifiController::handleAp(const TerminalCommand &cmd)
         auto ssid = nvsService.getString(nvsSsidField, "");
         auto password = nvsService.getString(nvsPasswordField, "");
 
-        // Try to reconnect to saved C5 WiFi
+        // Try to reconnect to saved C6 WiFi
         if (!ssid.empty() && !password.empty())
         {
             wifiService.connect(ssid, password);
@@ -260,7 +260,7 @@ void WifiController::handleAp(const TerminalCommand &cmd)
     }
     else
     {
-        terminalView.println("C5 WiFi: Failed to start Access Point.");
+        terminalView.println("C6 WiFi: Failed to start Access Point.");
     }
 }
 
@@ -269,7 +269,7 @@ AP Spam
 */
 void WifiController::handleApSpam()
 {
-    terminalView.println("C5 WiFi: Starting beacon spam on 5 GHz channels... Press [ENTER] to stop.");
+    terminalView.println("C6 WiFi: Starting beacon spam on 5 GHz channels... Press [ENTER] to stop.");
     while (true)
     {
         beaconCreate("", 0, 0); // func from Vendors/wifi_atks.h
@@ -280,7 +280,7 @@ void WifiController::handleApSpam()
         delay(10);
     }
 
-    terminalView.println("C5 WiFi: Beacon spam stopped.\n");
+    terminalView.println("C6 WiFi: Beacon spam stopped.\n");
 }
 
 /*
@@ -288,7 +288,7 @@ Scan
 */
 void WifiController::handleScan(const TerminalCommand &)
 {
-    terminalView.println("C5 WiFi: Scanning for networks...");
+    terminalView.println("C6 WiFi: Scanning for networks...");
     delay(300);
 
     auto networks = wifiService.scanDetailedNetworks();
@@ -312,7 +312,7 @@ void WifiController::handleScan(const TerminalCommand &)
 
     if (networks.empty())
     {
-        terminalView.println("C5 WiFi: No networks found.");
+        terminalView.println("C6 WiFi: No networks found.");
     }
 }
 
@@ -397,7 +397,7 @@ void WifiController::handleSniff(const TerminalCommand &cmd)
         return;
     }
 
-    terminalView.println("C5 WiFi Sniffing started... Press [ENTER] to stop.\n");
+    terminalView.println("C6 WiFi Sniffing started... Press [ENTER] to stop.\n");
 
     wifiService.startPassiveSniffing();
 
@@ -454,7 +454,7 @@ void WifiController::handleSniff(const TerminalCommand &cmd)
     }
 
     wifiService.stopPassiveSniffing();
-    terminalView.println("C5 WiFi Sniffing stopped.\n");
+    terminalView.println("C6 WiFi Sniffing stopped.\n");
 }
 
 /*
@@ -526,7 +526,7 @@ void WifiController::handleRepeater(const TerminalCommand& cmd)
 
     // Must be connected first
     if (!wifiService.isConnected()) {
-        terminalView.println("C5 WiFi Repeater: C5 WiFi not connected. Run 'connect' first.\n");
+        terminalView.println("C6 WiFi Repeater: C6 WiFi not connected. Run 'connect' first.\n");
         return;
     }
 
@@ -537,7 +537,7 @@ void WifiController::handleRepeater(const TerminalCommand& cmd)
 
     if (sub == "stop") {
         wifiService.stopRepeater();
-        terminalView.println("C5 WiFi Repeater: Stop routing traffic between uplink and repeater.\n");
+        terminalView.println("C6 WiFi Repeater: Stop routing traffic between uplink and repeater.\n");
         return;
     }
 
@@ -612,7 +612,7 @@ void WifiController::handleRepeater(const TerminalCommand& cmd)
     }
 
     if (staSsid.empty()) {
-        terminalView.println("C5 WiFi Repeater: C5 WiFi not connected, run 'connect' first.\n");
+        terminalView.println("C6 WiFi Repeater: C6 WiFi not connected, run 'connect' first.\n");
         return;
     }
 
@@ -634,7 +634,7 @@ void WifiController::handleRepeater(const TerminalCommand& cmd)
         return;
     }
 
-    terminalView.println("C5 WiFi Repeater: Routing traffic between uplink and repeater...");
+    terminalView.println("C6 WiFi Repeater: Routing traffic between uplink and repeater...");
     terminalView.println("\n  Uplink           : " + staSsid);
     terminalView.println("  Repeater SSID    : " + apSsid);
     terminalView.println("  Repeater Pass    : " + std::string(apPassMasked.empty() ? "(open)" :  apPassMasked));
@@ -657,13 +657,13 @@ void WifiController::handleEvil(const TerminalCommand& cmd)
 
     auto confirmation = userInputManager.readYesNo("Start Wi-Fi attack/sniffer module?", false);
     if (!confirmation) {
-        terminalView.println("C5 WiFi: Start cancelled.\n");
+        terminalView.println("C6 WiFi: Start cancelled.\n");
         return;
     }
 
     setupEvilSlave();
 
-    terminalView.println("C5 WiFi: Started sniffing... Press [ENTER] to stop.\n");
+    terminalView.println("C6 WiFi: Started sniffing... Press [ENTER] to stop.\n");
 
     while (true) {
         char c = terminalInput.readChar();
@@ -671,7 +671,7 @@ void WifiController::handleEvil(const TerminalCommand& cmd)
         runEvilSlave(); // by default scan, deauth and sniff handshakes on all channels
     }
 
-    terminalView.println("\nC5 WiFi: Stopped by user.\n");
+    terminalView.println("\nC6 WiFi: Stopped by user.\n");
 }
 
 /*
@@ -706,7 +706,7 @@ void WifiController::handleFlood(const TerminalCommand& cmd)
         beaconCreate("", channel, 0); // func from Vendors/wifi_atks.h
      }
 
-    terminalView.println("C5 WiFi Flood: Stopped by user.\n");
+    terminalView.println("C6 WiFi Flood: Stopped by user.\n");
 }
 
 /*
@@ -730,14 +730,14 @@ void WifiController::handleDeauth(const TerminalCommand &cmd)
         target += " " + cmd.getArgs();
     }
 
-    terminalView.println("C5 WiFi: Sending deauth to \"" + target + "\"...");
+    terminalView.println("C6 WiFi: Sending deauth to \"" + target + "\"...");
 
     bool ok = wifiService.deauthApBySsid(target);
 
     if (ok)
-        terminalView.println("C5 WiFi: Deauth frames sent.");
+        terminalView.println("C6 WiFi: Deauth frames sent.");
     else
-        terminalView.println("C5 WiFi: SSID not found.");
+        terminalView.println("C6 WiFi: SSID not found.");
 }
 
 /*
@@ -745,11 +745,11 @@ Help
 */
 void WifiController::handleHelp()
 {
-    terminalView.println("\nAvailable C5 WiFi commands:");
+    terminalView.println("\nAvailable C6 WiFi commands:");
     terminalView.println("");
     terminalView.println("  connect [ssid] [password]  Connect to 2.4GHz or 5GHz Wi-Fi");
     terminalView.println("  disconnect                 Disconnect from current Wi-Fi");
-    terminalView.println("  status                     Show C5 Wi-Fi status");
+    terminalView.println("  status                     Show C6 Wi-Fi status");
     terminalView.println("  scan                       Scan nearby 2.4GHz and 5GHz networks");
     terminalView.println("  discovery [timeout_ms]     Run network discovery");
     terminalView.println("  probe                      Probe open networks for internet access");
@@ -768,8 +768,8 @@ void WifiController::handleHelp()
     terminalView.println("  http analyze <url>         Get analysis report for a URL");
     terminalView.println("  lookup mac|ip <host>       Run lookup utilities (IP, MAC, etc.)");
     terminalView.println("  modbus <host> [port]       Open Modbus-related commands");
-    terminalView.println("  reset                      Reset C5 Wi-Fi interface");
-    terminalView.println("  exit                       Exit the C5 WiFi mode");
+    terminalView.println("  reset                      Reset C6 Wi-Fi interface");
+    terminalView.println("  exit                       Exit the C6 WiFi mode");
     terminalView.println("");
 }
 
@@ -779,7 +779,7 @@ Reset
 void WifiController::handleReset()
 {
     wifiService.reset();
-    terminalView.println("C5 WiFi: Interface reset. Disconnected.");
+    terminalView.println("C6 WiFi: Interface reset. Disconnected.");
 }
 
 /*

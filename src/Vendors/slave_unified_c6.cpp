@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------
-  ESP32-C5 Unified (Serial-controlled)
+  ESP32-C6 Unified (Serial-controlled)
   Modes:
-    - DEAUTH : original slave_deauther_C5 (scan + optional deauth)
+    - DEAUTH : original slave_deauther_C6 (scan + optional deauth)
     - WARD   : wardriving passive scan -> ESP-NOW AP info
     - MULTI  : channel-hopping deauth + handshake capture -> ESP-NOW fragments
 
@@ -10,7 +10,7 @@
   https://github.com/7h30th3r0n3/Evil-M5Project/blob/main/slave/C5-Slave/slave_unified_C5.ino
 ---------------------------------------------------------------------*/
 
-#include "slave_unified_c5.h"
+#include "slave_unified_c6.h"
 
 // ─────────────────────────────────────────────
 // 1. INCLUDES
@@ -889,7 +889,7 @@ static void wifi_sniffer_packet_handler(void *buf, wifi_promiscuous_pkt_type_t) 
     esp_now_add_peer(&pi);
 
     uint8_t actualChan = WiFi.channel();
-    // Must match original slave_multi_C5 channelsListAll ordering (no ch14).
+    // Must match original slave_multi_C6 channelsListAll ordering (no ch14).
     static const uint8_t channelsAll[] = {
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13,
       36, 40, 44, 48, 52, 56, 60, 64,

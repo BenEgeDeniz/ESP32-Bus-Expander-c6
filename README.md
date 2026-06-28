@@ -5,11 +5,11 @@
 
 **ESP32 Bus Expander** is a companion firmware designed to extend the capabilities of the [ESP32 Bus Pirate](https://github.com/geo-tp/ESP32-Bus-Pirate).
 
-It runs on an **ESP32-C5** and connects to the main Bus Pirate device via **UART**, adding hardware features that are not available on the primary board.
+It runs on an **ESP32-C6** and connects to the main Bus Pirate device via **UART**, adding hardware features that are not available on the primary board.
 
 The first goal of this expansion module is to provide **5 GHz Wi-Fi support**, which is not available on most ESP32-S3 based boards. Future versions may also expose **802.15.4 radio protocols** such as **Zigbee** and **Thread**.
 
-To flash it, use the webflasher and select **ESP32 Bus Expander (ESP32-C5)**: [ESP32 Bus Pirate Web Flasher](https://geo-tp.github.io/ESP32-Bus-Pirate/webflasher/).
+To flash it, use the webflasher and select **ESP32 Bus Expander (ESP32-C6)**: [ESP32 Bus Pirate Web Flasher](https://geo-tp.github.io/ESP32-Bus-Pirate/webflasher/).
 
 ## Concept
 
@@ -24,7 +24,7 @@ ESP32 Bus Pirate (ESP32-S3)
         │
         │ UART
         ▼
-ESP32 Bus Expander (ESP32-C5)
+ESP32 Bus Expander (ESP32-C6)
 ```
 
 - The **Bus Pirate** remains the main interface (CLI, scripts, tools).
@@ -43,7 +43,7 @@ With the expander connected, the Bus Pirate can interact with networks that requ
 
 ## Planned Features
 
-Future firmware versions may extend support for additional radio protocols available on the **ESP32-C5**, including:
+Future firmware versions may extend support for additional radio protocols available on the **ESP32-C6**, including:
 
 - **Zigbee (IEEE 802.15.4)**
 - **Thread**
@@ -55,11 +55,11 @@ This will allow the ESP32 Bus Pirate ecosystem to interact with **IoT wireless n
 
 ## Hardware
 
-The Bus Expander is designed for **ESP32-C5 based boards**.
+The Bus Expander is designed for **ESP32-C6 based boards**.
 
 Minimum requirements:
 
-- ESP32-C5 chip (4MB flash, no PSRAM needed)
+- ESP32-C6 chip (4MB flash, no PSRAM needed)
 - UART connection to the Bus Pirate device
 
 ## Connection
