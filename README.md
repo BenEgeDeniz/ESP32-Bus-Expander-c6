@@ -7,7 +7,7 @@
 
 It runs on an **ESP32-C6** and connects to the main Bus Pirate device via **UART**, adding hardware features that are not available on the primary board.
 
-The first goal of this expansion module is to provide **5 GHz Wi-Fi support**, which is not available on most ESP32-S3 based boards. Future versions may also expose **802.15.4 radio protocols** such as **Zigbee** and **Thread**.
+The first goal of this expansion module is to provide expanded Wi-Fi tooling on a secondary ESP32, while future versions may also expose **802.15.4 radio protocols** such as **Zigbee** and **Thread**.
 
 To flash it, use the webflasher and select **ESP32 Bus Expander (ESP32-C6)**: [ESP32 Bus Pirate Web Flasher](https://geo-tp.github.io/ESP32-Bus-Pirate/webflasher/).
 
@@ -34,12 +34,12 @@ It allows new radio technologies to be added without changing the main firmware.
 
 ## Current Features
 
-- **Wi-Fi 5 GHz support**
+- **Wi-Fi support (ESP32-C6 radio)**
 - Connected to the Bus Pirate via **UART**
 - Works as a **radio coprocessor**
 - Can be controlled from the Bus Pirate firmware
 
-With the expander connected, the Bus Pirate can interact with networks that require **5 GHz connectivity**.
+With the expander connected, the Bus Pirate can offload wireless operations to the ESP32-C6 coprocessor.
 
 ## Planned Features
 
